@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kaza Namazı Takibi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f3f3f3;
+      padding: 30px;
+    }
+    h1 {
+      margin-bottom: 30px;
+    }
+    .vakit {
+      background: #fff;
+      padding: 20px;
+      margin: 10px auto;
+      border-radius: 8px;
+      width: 250px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .vakit button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Kaza Namazı Takibi</h1>
+
+  <div id="vakits">
+    <!-- Namaz vakitleri buraya gelecek -->
+  </div>
+
+  <script>
+    const vakitler = ["Sabah", "Öğle", "İkindi", "Akşam", "Yatsı"];
+    const başlangıç = 4745;
+
+    const vakitContainer = document.getElementById("vakits");
+
+    vakitler.forEach(vakit => {
+      const key = "kaza_" + vakit;
+      if (localStorage.getItem(key) === null) {
+        localStorage.setItem(key, başlangıç);
+      }
+
+      const div = document.createElement("div");
+      div.className = "vakit";
+
+      const title = document.createElement("h2");
+      title.innerText = vakit;
+
+      const count = document.createElement("p");
+      count.id = "sayac_" + vakit;
+      count.innerText = "Kalan: " + localStorage.getItem(key);
+
+      const button = document.createElement("button");
+      button.innerText = vakit + " → 1 Eksilt";
+      button.onclick = () => {
+        let current = parseInt(localStorage.getItem(key));
+        if (current > 0) {
+          localStorage.setItem(key, current - 1);
+          count.innerText = "Kalan: " + (current - 1);
+        } else {
+          alert(vakit + " namazı için borç kalmadı.");
+        }
+      };
+
+      div.appendChild(title);
+      div.appendChild(count);
+      div.appendChild(button);
+      vakitContainer.appendChild(div);
+    });
+  </script>
+</body>
+</html>
